@@ -1,0 +1,5 @@
+@reference "tailwindcss";
+
+.btn {
+  @apply border-1 rounded flex items-center p-2 cursor-pointer;
+}
