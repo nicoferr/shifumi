@@ -3,12 +3,14 @@ import cors from "cors";
 import apiRoutes from "./routes/api.ts";
 import { createServer } from "http";
 import { Server } from "socket.io";
+import { v4 as uuidv4 } from "uuid";
 
 const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
     cors: {
-        origin: "*" // Change in PROD
+        origin: "http://localhost:5173", // Change in PROD
+        methods: ["GET", "POST"]
     }
 });
 
@@ -21,12 +23,22 @@ app.use('/api', apiRoutes);
 io.on("connection", (socket) => {
     console.log("Client connected :", socket.id);
 
+    socket.on("createRoom", (roomName) => {
+        if(!roomName)
+            roomName = uuidv4()
+
+        socket.join(roomName);
+        socket.emit("roomCreated", roomName);
+
+        console.log(`New room created : ${roomName}`);
+    })
+
     socket.on("disconnect", () => {
         console.log("Client disconnected :", socket.id);
     });
 })
 
 const PORT = 4000;
-app.listen(PORT, () => {
+httpServer.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
