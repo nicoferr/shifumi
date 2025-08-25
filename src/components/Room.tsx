@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSocket } from "../providers/SocketProvider";
 
 export default function Room(props: any) {
@@ -6,10 +6,12 @@ export default function Room(props: any) {
     const { roomName } = props;
     const socket = useSocket();
 
+    const [room, setRoom] = useState("");
+
     useEffect(() => {
 
-        socket.on("roomCreated", () => {
-
+        socket.on("roomCreated", (roomName) => {
+            setRoom(roomName);
         });
 
         socket.emit("createRoom", roomName);
