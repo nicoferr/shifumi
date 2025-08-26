@@ -8,7 +8,7 @@ interface ServerToClientEvents {
 }
 interface ClientToServerEvents {
   message: (msg: string) => void;
-  createRoom: (roomName: string | null) => void;
+  createRoom: () => void;
   leaveRoom: (roomName: string) => void;
 }
 
@@ -41,7 +41,7 @@ export default function SocketProvider(props:any) {
 export const useSocket = () => {
   const socket = useContext(SocketContext);
   if (!socket) {
-    throw new Error("useSocket must be used inside a SocketProvider");
+    // throw new Error("useSocket must be used inside a SocketProvider");
   }
   return socket;
 };

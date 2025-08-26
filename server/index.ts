@@ -6,6 +6,7 @@ import { Server } from "socket.io";
 import { v4 as uuidv4 } from "uuid";
 
 const app = express();
+
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
     cors: {
@@ -23,15 +24,19 @@ app.use('/api', apiRoutes);
 io.on("connection", (socket) => {
     console.log("Client connected :", socket.id);
 
-    socket.on("createRoom", (roomName) => {
-        if(!roomName)
-            roomName = uuidv4()
+    socket.on("createRoom", () => {
+        const roomName = uuidv4()
 
         socket.join(roomName);
         socket.emit("roomCreated", roomName);
 
         console.log(`New room created : ${roomName}`);
-    })
+    });
+
+    socket.on("leaveRoom", (roomName) => {
+        socket.leave(roomName);
+        console.log("Room left :", roomName)
+    });
 
     socket.on("disconnect", () => {
         console.log("Client disconnected :", socket.id);

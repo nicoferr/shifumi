@@ -1,28 +1,33 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useSocket } from "../providers/SocketProvider";
+import { NavLink, useParams } from "react-router-dom";
 
-export default function Room(props: any) {
+export default function Room() {
 
-    const { roomName } = props;
+    const { roomName } = useParams();
     const socket = useSocket();
 
-    const [room, setRoom] = useState("");
-
     useEffect(() => {
+        console.log("socket id", socket?.id);
+        const handleBeforeUnload = () => {
+            if(roomName)
+                socket?.emit("leaveRoom", roomName);
+        };
 
-        socket.on("roomCreated", (roomName) => {
-            setRoom(roomName);
-        });
-
-        socket.emit("createRoom", roomName);
+        window.addEventListener("beforeunload", handleBeforeUnload);
 
         return () => {
-            socket.emit("leaveRoom", roomName)
-        }
+            // Lors de la navigation vers une autre page
+            if(roomName)
+            socket?.emit("leaveRoom", roomName);
+            window.removeEventListener("beforeunload", handleBeforeUnload);
+        };
     }, []);
 
     return (
         <>
+            <NavLink to="/"><button className="btn">Homepage</button></NavLink>
+            <input disabled value={`http://localhost:5173/room/${roomName}`}/>
         </>
     )
 }
