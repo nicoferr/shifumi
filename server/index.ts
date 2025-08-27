@@ -4,6 +4,7 @@ import apiRoutes from "./routes/api.ts";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import { v4 as uuidv4 } from "uuid";
+import { join } from "path";
 
 const app = express();
 
@@ -20,6 +21,19 @@ app.use(express.json());
 
 app.use('/api', apiRoutes);
 
+const joinRoom = (socket, roomName) => {
+    socket.join(roomName)
+
+    console.log(socket.id, "joined room:", roomName);
+
+    // Check number of players
+    const room = io.sockets.adapter.rooms.get(roomName);
+    // console.log("room:", room);
+    // console.log("room size:", room?.size);
+    if(room && room.size == 2) {
+        socket.to(roomName).emit("startGame");
+    }
+}
 
 io.on("connection", (socket) => {
     console.log("Client connected :", socket.id);
@@ -27,15 +41,25 @@ io.on("connection", (socket) => {
     socket.on("createRoom", () => {
         const roomName = uuidv4()
 
-        socket.join(roomName);
+        joinRoom(socket, roomName);
         socket.emit("roomCreated", roomName);
-
         console.log(`New room created : ${roomName}`);
+    });
+
+    socket.on("joinRoom", (roomName) => {
+        console.log("join room requested");
+        joinRoom(socket, roomName);
     });
 
     socket.on("leaveRoom", (roomName) => {
         socket.leave(roomName);
-        console.log("Room left :", roomName)
+        console.log(socket.id, "left room:", roomName);
+        
+        const room = io.sockets.adapter.rooms.get(roomName);
+        if(room && room.size < 2) {
+            socket.to(roomName).emit("stopGame");
+        }        
+
     });
 
     socket.on("disconnect", () => {
