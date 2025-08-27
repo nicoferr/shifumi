@@ -5,8 +5,7 @@ import { io, Socket } from "socket.io-client";
 interface ServerToClientEvents {
   message: (msg: string) => void;
   roomCreated: (roomId: string) => void;
-  startGame: () => void;
-  stopGame: () => void;
+  startGame: (start: boolean) => void;
 }
 interface ClientToServerEvents {
   message: (msg: string) => void;

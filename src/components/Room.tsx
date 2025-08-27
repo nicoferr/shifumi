@@ -14,12 +14,8 @@ export default function Room() {
         if(!socket) return;
         console.log("socket id", socket.id);
 
-        socket.on("startGame", () => {
-            setStartGame(true);
-        })
-
-        socket.on("stopGame", () => {
-            setStartGame(false);
+        socket.on("startGame", (startGame) => {
+            setStartGame(startGame);
         })
 
         if(roomName) {
@@ -40,9 +36,8 @@ export default function Room() {
                 socket.emit("leaveRoom", roomName);
             window.removeEventListener("beforeunload", handleBeforeUnload);
             socket.off("startGame");
-            socket.off("stopGame");
         };
-    }, [socket, roomName, startGame]);
+    }, [socket, roomName]);
 
     useEffect(() => {
         if(linkCopied) {

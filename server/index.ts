@@ -28,10 +28,10 @@ const joinRoom = (socket, roomName) => {
 
     // Check number of players
     const room = io.sockets.adapter.rooms.get(roomName);
-    // console.log("room:", room);
+    console.log("room:", room);
     // console.log("room size:", room?.size);
     if(room && room.size == 2) {
-        socket.to(roomName).emit("startGame");
+        io.to(roomName).emit("startGame", true);
     }
 }
 
@@ -56,8 +56,8 @@ io.on("connection", (socket) => {
         console.log(socket.id, "left room:", roomName);
         
         const room = io.sockets.adapter.rooms.get(roomName);
-        if(room && room.size < 2) {
-            socket.to(roomName).emit("stopGame");
+        if(!room || room.size < 2) {
+            io.to(roomName).emit("startGame", false);
         }        
 
     });
