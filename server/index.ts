@@ -62,6 +62,10 @@ io.on("connection", (socket) => {
 
     });
 
+    socket.on("playerChoice", ({ roomName, choice}) => {
+        socket.to(roomName).emit("opponentChoice", choice);
+    });
+
     socket.on("disconnect", () => {
         console.log("Client disconnected :", socket.id);
     });

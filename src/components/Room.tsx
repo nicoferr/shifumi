@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSocket } from "../providers/SocketProvider";
 import { NavLink, useParams } from "react-router-dom";
+import Game from "./Game";
 
 export default function Room() {
 
@@ -70,7 +71,7 @@ export default function Room() {
             </div>
             { startGame && 
                 <div>
-                    GAME STARTED
+                    <Game roomName={roomName} socket={socket} />
                 </div>
             }
         </>
