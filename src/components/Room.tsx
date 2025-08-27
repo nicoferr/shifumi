@@ -10,10 +10,13 @@ export default function Room() {
     // const [ username, setUsername ] = useState<String | null>("Anonymous")
     const [ linkCopied, setLinkCopied ] = useState(false);
     const [ startGame, setStartGame ] = useState(false);
+    const [ inviteLink, setInviteLink ] = useState("");
 
     useEffect(() => {
         if(!socket) return;
         console.log("socket id", socket.id);
+
+        setInviteLink(`http://localhost:5173/room/${roomName}`)
 
         socket.on("startGame", (startGame) => {
             setStartGame(startGame);
@@ -48,32 +51,31 @@ export default function Room() {
         }
     }, [linkCopied]);
 
-    const copyInvite = async (e: any) => {
-        const link = e.target.value;
-
-        console.log("link", link);
-        
-        await navigator.clipboard.writeText(link);
+    const copyInvite = async () => {
+        await navigator.clipboard.writeText(inviteLink);
         setLinkCopied(true);
     }
 
     return (
-        <>
+        <div className="p-4">
             { linkCopied && 
-                <div className="absolute m-2 w-full flex items-center justify-center">
+                <div className="fixed w-full p-2 flex items-center justify-center">
                     <div className=" bg-green-400 text-white text-center p-2 rounded">Invite link saved in clipboard</div>
                 </div>
             }
             <NavLink to="/"><button className="btn">Homepage</button></NavLink>
-            <div className="flex items-center">
+            <div className="flex items-center w-full gap-4">
                 <label htmlFor="invite">Invite a friend by giving him this url :</label>
-                <input id="invite" readOnly value={`http://localhost:5173/room/${roomName}`} onClickCapture={copyInvite} />
+                <input id="invite" className="w-1/2 px-3 py-2 rounded-md border border-gray-300 bg-gray-100 text-gray-500" readOnly value={inviteLink} onClick={copyInvite} />
+                <button className="bg-blue-400 text-white py-2 px-4 rounded cursor-pointer" onClick={copyInvite}>Copy</button>
             </div>
-            { startGame && 
+            { startGame ? 
                 <div>
                     <Game roomName={roomName} socket={socket} />
                 </div>
+                :
+                <div>Waiting for opponent...</div>
             }
-        </>
+        </div>
     )
 }
