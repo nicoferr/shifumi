@@ -1,7 +1,7 @@
 import { BrowserRouter, Navigate, Outlet, Route, Routes } from 'react-router-dom';
 import './App.css';
 import Player from './components/Player';
-import ChoicesProvider from './providers/ChoicesProvider';
+import ChoicesProvider from './providers/GameProvider';
 import Homepage from './components/Homepage';
 import Room from './components/Room';
 import SocketProvider from './providers/SocketProvider';

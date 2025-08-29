@@ -35,6 +35,12 @@ const joinRoom = (socket, roomName) => {
     }
 }
 
+let newGameRequests = []; // Array of Number of player asking for new game PER ROOM
+const initNewGameRequests = (roomName: string) => {
+    newGameRequests[roomName] = 0;
+}
+
+
 io.on("connection", (socket) => {
     console.log("Client connected :", socket.id);
 
@@ -49,6 +55,7 @@ io.on("connection", (socket) => {
     socket.on("joinRoom", (roomName) => {
         console.log("join room requested");
         joinRoom(socket, roomName);
+        initNewGameRequests(roomName);
     });
 
     socket.on("leaveRoom", (roomName) => {
@@ -64,6 +71,17 @@ io.on("connection", (socket) => {
 
     socket.on("playerChoice", ({ roomName, choice}) => {
         socket.to(roomName).emit("opponentChoice", choice);
+    });
+
+    socket.on("newGameAsked", ({ roomName }) => {
+        const nbRequests = newGameRequests[roomName] + 1;
+        
+        if( nbRequests == 2) {
+            initNewGameRequests(roomName);
+            io.to(roomName).emit("newGame");
+        } else {
+            newGameRequests[roomName]++;
+        }
     });
 
     socket.on("disconnect", () => {

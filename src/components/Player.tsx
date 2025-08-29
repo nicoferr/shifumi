@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { ChoicesContext } from "../providers/ChoicesProvider";
+import { ChoicesContext } from "../providers/GameProvider";
 
 export default function Player(props: any) {
 
