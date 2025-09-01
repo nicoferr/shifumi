@@ -1,26 +1,43 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import GameResult from "./GameResult";
 import { useGame } from "../providers/GameProvider";
 
 export default function Game(props: any) {
 
     const { socket, roomName } = props;
+    const vsComputer = roomName == "vs-computer";
     const { gameState, setGameState } = useGame();
+    const [ skins, setSkins ] = useState('');
+    const [ choices, setChoices ] = useState<any>([]);
     
     useEffect(() => {
-        socket.on("opponentChoice", (opponentChoice: number) => {
-            setGameState((prev) => ({ ...prev, opponentChoice }));
-        });
+        setSkins('objects');
 
-        socket.on("newGame", () => {
-            handleNewGame();
-        });
+        if(!vsComputer) {
+            socket.on("opponentChoice", (opponentChoice: number) => {
+                setGameState((prev) => ({ ...prev, opponentChoice }));
+            });
+    
+            socket.on("newGame", () => {
+                handleNewGame();
+            });
+        }
 
         return () => {
-            socket.off("opponentChoice");
-            socket.off("newGame");
+            if(!vsComputer) {
+                socket.off("opponentChoice");
+                socket.off("newGame");
+            }
         }
     }, [])
+
+    useEffect(() => {
+        setChoices([
+            { beats: 2, value: "Rock", src: `/images/skins/${skins}/rock.png` }, 
+            { beats: 0, value: "Paper", src: `/images/skins/${skins}/paper.png` }, 
+            { beats: 1, value: "Scissors", src: `/images/skins/${skins}/scissors.png` }, 
+        ])
+    }, [skins])
 
     useEffect(() => {
         const { ready, playerChoice, opponentChoice } = gameState;
@@ -30,12 +47,6 @@ export default function Game(props: any) {
             }
         }
     }, [gameState])
-
-    const choices = [
-        { beats: 2, value: "Rock", src: "/images/skins/hands/rock.png" }, 
-        { beats: 0, value: "Paper", src: "/images/skins/hands/paper.png" }, 
-        { beats: 1, value: "Scissors", src: "/images/skins/hands/scissors.png" }, 
-    ]
 
     const handleChoice = (choice: number) => {
         setGameState(prev => ({ ...prev, playerChoice: choice }));
@@ -47,12 +58,20 @@ export default function Game(props: any) {
 
         if(playerChoice > -1) {
             setGameState(prev => ({ ...prev, ready: true, isValidationEnabled: false }));
-            socket.emit('playerChoice', { roomName, choice: playerChoice });
+            if(!vsComputer) {
+                socket.emit('playerChoice', { roomName, choice: playerChoice });
+            } else {
+                handleComputer()
+            }
         }
     }
 
     const handleAskNewGame = () => {
-        socket.emit("newGameAsked", { roomName })
+        if(!vsComputer) {
+            socket.emit("newGameAsked", { roomName })
+        } else {
+            handleNewGame();
+        }
     }
 
     const handleNewGame = () => {
@@ -63,15 +82,31 @@ export default function Game(props: any) {
             opponentChoice: -1,
             displayChoices: true,
             isValidationEnabled: true
-
         }))
+    }
+
+    const handleComputer = () => {
+        const computerChoice = getSecureRandomInt(0,2);
+        setGameState((prev) => ({...prev, opponentChoice: computerChoice}));
+    }
+
+    // Fonction proposée par ChatGPT 5
+    const getSecureRandomInt = (min: number, max: number): number => {
+        const array = new Uint32Array(1);
+        crypto.getRandomValues(array);
+        return min + (array[0] % (max - min + 1));
     }
 
     return (
         <>
         {/* TEST WITH timesFM IA */}
-            
-            <h1 className="text-center my-3 font-bold">WINS: {gameState.playerWins}</h1>
+            <div className="flex items-center justify-center gap-5 w-full">
+                <h1 className="text-center my-3 font-bold">WINS: {gameState.playerWins}</h1>
+                /
+                <h1 className="text-center my-3 font-bold">LOSSES: {gameState.playerLosses}</h1>
+                /
+                <h1 className="text-center my-3 font-bold">DRAWS: {gameState.playerDraws}</h1>
+            </div>
 
             {/** Boutons de choix */}
             { gameState.displayChoices &&
@@ -81,7 +116,7 @@ export default function Game(props: any) {
                             return (
                                 <button 
                                     key={key}
-                                    className={`btn w-1/10 ${ gameState.playerChoice == key ? "border-red-500 shadow-md shadow-gray-500" : "" }`}
+                                    className={`btn bg-gray-100 max-w-[300px] ${ gameState.playerChoice == key ? "border-red-500 shadow-md shadow-gray-500" : "" }`}
                                     onClick={() => handleChoice(key)}
                                     disabled={!gameState.isValidationEnabled}
                                 >
@@ -91,8 +126,20 @@ export default function Game(props: any) {
                         })}
                     </div>
                     {/** Bouton de validation (Prêt !) */}
-                    <div className="flex items-center justify-center my-4">
-                        <button disabled={!gameState.isValidationEnabled} className="btn bg-green-500 text-white" onClick={handleReady}>Ready</button>
+                    <div className="flex items-center justify-center gap-5 my-4">
+                        { gameState.playerChoice > -1 && <button disabled={!gameState.isValidationEnabled} className="btn btn-blue px-6" onClick={handleReady}>Ready</button> }
+                        { gameState.playerChoice < 0 && 
+                        <>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-5">
+                                <path fillRule="evenodd" d="M11.47 2.47a.75.75 0 0 1 1.06 0l7.5 7.5a.75.75 0 1 1-1.06 1.06l-6.22-6.22V21a.75.75 0 0 1-1.5 0V4.81l-6.22 6.22a.75.75 0 1 1-1.06-1.06l7.5-7.5Z" clipRule="evenodd" />
+                            </svg>
+
+                            <div>Select your move</div>
+                            
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-5">
+                                <path fillRule="evenodd" d="M11.47 2.47a.75.75 0 0 1 1.06 0l7.5 7.5a.75.75 0 1 1-1.06 1.06l-6.22-6.22V21a.75.75 0 0 1-1.5 0V4.81l-6.22 6.22a.75.75 0 1 1-1.06-1.06l7.5-7.5Z" clipRule="evenodd" />
+                            </svg>
+                        </>}
                     </div>
                 </>
             }

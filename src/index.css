@@ -1,1 +1,76 @@
 @import "tailwindcss";
+
+/** généré par chatGPT 5 */
+/* Palette : jaunes foncés (légèrement chauds) */
+:root{
+    --yellow-d1: #a07d00; /* doré soutenu (plus clair que #806600) */
+  --yellow-d2: #b08c00; /* jaune ocre chaud */
+  --yellow-d3: #c19b00; /* doré moyen */
+  --yellow-d4: #d1aa00; /* doré clair */
+  --yellow-d5: #e1b900; /* jaune lumineux */
+  --yellow-d6: #f1c800; /* jaune doré éclatant */
+}
+
+/* Linéaire – look moderne, direction diagonale */
+.bg-gradient-yellow-dark{
+  /* couleur de repli */
+  background: var(--yellow-d3);
+  background-image: linear-gradient(
+    135deg,
+    var(--yellow-d1) 0%,
+    var(--yellow-d2) 18%,
+    var(--yellow-d3) 40%,
+    var(--yellow-d4) 62%,
+    var(--yellow-d5) 82%,
+    var(--yellow-d6) 100%
+  );
+}
+
+/* Radial – centre lumineux, bords plus sombres */
+.bg-gradient-yellow-dark-radial{
+  background: var(--yellow-d3);
+  background-image: radial-gradient(
+    circle at 30% 25%,
+    var(--yellow-d6) 0%,
+    var(--yellow-d5) 25%,
+    var(--yellow-d4) 50%,
+    var(--yellow-d3) 70%,
+    var(--yellow-d2) 85%,
+    var(--yellow-d1) 100%
+  );
+}
+
+/* Conique – subtil, élégant pour sections/hero */
+.bg-gradient-yellow-dark-conic{
+  background: var(--yellow-d3);
+  background-image: conic-gradient(
+    from 210deg at 70% 60%,
+    var(--yellow-d6),
+    var(--yellow-d5),
+    var(--yellow-d4),
+    var(--yellow-d3),
+    var(--yellow-d2),
+    var(--yellow-d1),
+    var(--yellow-d6)
+  );
+}
+
+/* Variante animée très douce (optionnelle) */
+.bg-gradient-yellow-dark-animated{
+  background: linear-gradient(
+    135deg,
+    var(--yellow-d1),
+    var(--yellow-d3),
+    var(--yellow-d6),
+    var(--yellow-d3),
+    var(--yellow-d2)
+  );
+  background-size: 300% 300%;
+  animation: yellowShift 18s ease-in-out infinite;
+}
+
+@keyframes yellowShift{
+  0% { background-position: 0% 50%; }
+  50%{ background-position: 100% 50%; }
+  100%{ background-position: 0% 50%; }
+}

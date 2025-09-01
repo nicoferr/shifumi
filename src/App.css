@@ -1,5 +1,25 @@
-@reference "tailwindcss";
+@import "tailwindcss";
 
 .btn {
-  @apply border-1 rounded flex items-center p-2 cursor-pointer;
+  @apply border-1 rounded flex items-center py-2 px-6 cursor-pointer justify-center;
+}
+
+.btn-nav {
+  @apply bg-[#333333] hover:bg-[#4d4d4d] text-gray-200;
+}
+
+.btn-blue {
+  @apply bg-[#004080] hover:bg-[#0059a6] text-gray-200;
+}
+
+.btn-red {
+  @apply bg-[#7a1e00] hover:bg-[#992700] text-gray-200;
+}
+
+
+
+.bangers-regular {
+  font-family: "Bangers", system-ui;
+  font-weight: 400;
+  font-style: normal;
 }

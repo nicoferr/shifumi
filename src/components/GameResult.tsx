@@ -7,7 +7,6 @@ export default function GameResult(props: any) {
     const { choices, handleAskNewGame } = props
     const { gameState, setGameState } = useGame();
 
-
     const [ result, setResult ] = useState("");
     const [ isNewGameAsked, setAskNewGame ] = useState(false);
     const playerResult = choices[gameState.playerChoice];
@@ -18,10 +17,12 @@ export default function GameResult(props: any) {
         
         if (playerResult.beats == gameState.opponentChoice) {
             setGameState((prev) => ({ ...prev, playerWins: gameState.playerWins + 1 }));
-            gameResult = `${playerResult.value} beats ${playerResult.value}. You WIN !`
+            gameResult = `${playerResult.value} beats ${opponentResult.value}. You WIN !`
         } else if (opponentResult.beats == gameState.playerChoice) {
-            gameResult = `${opponentResult.value} beats ${opponentResult.value}. You lose !`
+            setGameState((prev) => ({ ...prev, playerLosses: gameState.playerLosses + 1 }));
+            gameResult = `${opponentResult.value} beats ${playerResult.value}. You lose !`
         } else {
+            setGameState((prev) => ({ ...prev, playerDraws: gameState.playerDraws + 1 }));
             gameResult = "This is a draw !";
         }
 
@@ -36,13 +37,13 @@ export default function GameResult(props: any) {
     return (
         <div className="flex flex-col gap-3">
             <div className="flex gap-5 items-center justify-center">
-                <div className="w-1/5"><img src={ playerResult.src } alt={ playerResult.value } /></div>
+                <div className="w-1/5 bg-gray-200"><img src={ playerResult.src } alt={ playerResult.value } /></div>
                 <span>{ result }</span>
-                <div className="w-1/5"><img src={ opponentResult.src } alt={ opponentResult.value } /></div>
+                <div className="w-1/5 bg-gray-200"><img src={ opponentResult.src } alt={ opponentResult.value } /></div>
             </div>
             <div className="flex items-center justify-center">
                 { isNewGameAsked && <div>Waiting for opponent for new game...</div> }
-                { !isNewGameAsked && <button className="btn bg-blue-400" onClick={handleNewGameRequest} >New game ?</button> }
+                { !isNewGameAsked && <button className="btn btn-red" onClick={handleNewGameRequest} >New game ?</button> }
             </div>
         </div>
     )

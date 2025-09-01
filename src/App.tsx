@@ -1,18 +1,17 @@
-import { BrowserRouter, Navigate, Outlet, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import './App.css';
-import Player from './components/Player';
-import ChoicesProvider from './providers/GameProvider';
 import Homepage from './components/Homepage';
 import Room from './components/Room';
 import SocketProvider from './providers/SocketProvider';
+import Header from './components/Header';
 
 
 function App() {
 
   return (
     <>
-      {/** Router */}
       <BrowserRouter>
+        <Header />
         <SocketProvider>
           <Routes>
             <Route path="/" element={<Homepage />} />
@@ -21,12 +20,6 @@ function App() {
           </Routes>
         </SocketProvider>
       </BrowserRouter>
-      
-      {/** Header */}
-
-      {/** Page d'accueil */}
-      
-      {/** Bouton pour créer une room - prompt qui demande vs IA ou vs autre joueur */}
     </>
   )
 }

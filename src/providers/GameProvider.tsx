@@ -5,6 +5,8 @@ interface GameState {
   playerChoice: number;
   opponentChoice: number;
   playerWins: number;
+  playerLosses: number;
+  playerDraws: number;
   ready: boolean;
   isValidationEnabled: boolean;
   displayResult: boolean;
@@ -25,6 +27,8 @@ export default function GameProvider(props:any) {
         playerChoice: -1,
         opponentChoice: -1,
         playerWins: 0,
+        playerLosses: 0,
+        playerDraws: 0,
         ready: false,
         isValidationEnabled: true,
         displayResult: false,
