@@ -1,18 +1,24 @@
 import { useEffect, useState } from "react"
 import GameResult from "./GameResult";
 import { useGame } from "../providers/GameProvider";
+import gameStyles from "../assets/games.json";
 
 export default function Game(props: any) {
 
-    const { socket, roomName } = props;
+    const { socket, roomName, gameStyle } = props;
     const vsComputer = roomName == "vs-computer";
     const { gameState, setGameState } = useGame();
-    const [ skins, setSkins ] = useState('');
     const [ choices, setChoices ] = useState<any>([]);
+
+    useEffect(() => {
+        const style = gameStyles.find(style => style.name == gameStyle);
+
+        if(style) {
+            setChoices(style.choices)
+        }
+    }, []);
     
     useEffect(() => {
-        setSkins('objects');
-
         if(!vsComputer) {
             socket.on("opponentChoice", (opponentChoice: number) => {
                 setGameState((prev) => ({ ...prev, opponentChoice }));
@@ -30,14 +36,6 @@ export default function Game(props: any) {
             }
         }
     }, [])
-
-    useEffect(() => {
-        setChoices([
-            { beats: 2, value: "Rock", src: `/images/skins/${skins}/rock.png` }, 
-            { beats: 0, value: "Paper", src: `/images/skins/${skins}/paper.png` }, 
-            { beats: 1, value: "Scissors", src: `/images/skins/${skins}/scissors.png` }, 
-        ])
-    }, [skins])
 
     useEffect(() => {
         const { ready, playerChoice, opponentChoice } = gameState;
@@ -86,7 +84,7 @@ export default function Game(props: any) {
     }
 
     const handleComputer = () => {
-        const computerChoice = getSecureRandomInt(0,2);
+        const computerChoice = getSecureRandomInt(0, choices.length - 1); // depending of the number of choices
         setGameState((prev) => ({...prev, opponentChoice: computerChoice}));
     }
 
@@ -120,7 +118,7 @@ export default function Game(props: any) {
                                     onClick={() => handleChoice(key)}
                                     disabled={!gameState.isValidationEnabled}
                                 >
-                                    <img src={item.src} alt={item.value} />
+                                    <img src={`/images/${item.image}`} alt={item.value} />
                                 </button>
                             )
                         })}

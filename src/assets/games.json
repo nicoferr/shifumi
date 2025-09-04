@@ -1,0 +1,72 @@
+[
+    {
+        "name": "standard",
+        "choices": [
+            {
+                "beats": [
+                    { "id": 2, "verb": "crushes" }
+                ],
+                "value": "Rock",
+                "image": "rock.png"
+            }, 
+            {
+                "beats": [
+                    { "id": 0, "verb": "covers" }
+                ],
+                "value": "Paper",
+                "image": "paper.png"
+            }, 
+            {
+                "beats": [
+                    { "id": 1, "verb": "cuts" }
+                ],
+                "value": "Scissors",
+                "image": "scissors.png" }
+        ]
+    },
+    {
+        "name": "lizard-spock",
+        "choices": [
+            { 
+                "beats": [
+                    { "id": 2, "verb": "crushes" },
+                    { "id": 3, "verb": "crushes" }
+                ],
+                "value": "Rock",
+                "image": "rock.png"
+            }, 
+            {
+                "beats": [
+                    { "id": 0, "verb": "covers" },
+                    { "id": 4, "verb": "disproves" }
+                ],
+                "value": "Paper",
+                "image": "paper.png"
+            }, 
+            {
+                "beats": [
+                    { "id": 1, "verb": "cuts" },
+                    { "id": 3, "verb": "decapitates" }
+                ],
+                "value": "Scissors",
+                "image": "scissors.png"
+            },
+            {
+                "beats": [
+                    { "id": 1, "verb": "eats" },
+                    { "id": 4, "verb": "poisons" }
+                ],
+                "value": "Lizard",
+                "image": "lizard.png"
+            },
+            {
+                "beats": [
+                    { "id": 0, "verb": "vaporizes" },
+                    { "id": 2, "verb": "smashes" }
+                ],
+                "value": "Spock",
+                "image": "spock.png"
+            }
+        ]
+    }
+]

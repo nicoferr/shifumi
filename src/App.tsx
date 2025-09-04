@@ -4,6 +4,7 @@ import Homepage from './components/Homepage';
 import Room from './components/Room';
 import SocketProvider from './providers/SocketProvider';
 import Header from './components/Header';
+import RoomCreation from './components/RoomCreation';
 
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
             <Route path="/" element={<Homepage />} />
             <Route path="/room" element={<Navigate to="/" replace />} />
             <Route path="/room/:roomName" element={<Room />} />
+            <Route path="/create-room" element={<RoomCreation />} />
           </Routes>
         </SocketProvider>
       </BrowserRouter>

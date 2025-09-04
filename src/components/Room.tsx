@@ -1,12 +1,17 @@
 import { useEffect, useState } from "react";
 import { useSocket } from "../providers/SocketProvider";
-import { NavLink, useParams } from "react-router-dom";
+import { NavLink, useLocation, useParams } from "react-router-dom";
 import Game from "./Game";
 import GameProvider from "../providers/GameProvider";
 
 export default function Room() {
 
     const { roomName } = useParams();
+
+    // On récupère le style de jeu (standard / lizard-spock) dans le state
+    const { state } = useLocation();
+    const gameStyle = state.gameStyle;
+    
     const vsComputer = roomName == 'vs-computer';
     const socket = useSocket();
     // const [ username, setUsername ] = useState<String | null>("Anonymous")
@@ -87,7 +92,7 @@ export default function Room() {
             { startGame || vsComputer ? 
                 <div>
                     <GameProvider>
-                        <Game roomName={roomName} socket={socket} />
+                        <Game roomName={roomName} socket={socket} gameStyle={gameStyle} />
                     </GameProvider>
                 </div>
                 :

@@ -1,6 +1,5 @@
 import express from "express";
 import cors from "cors";
-import apiRoutes from "./routes/api.ts";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import { v4 as uuidv4 } from "uuid";
@@ -18,8 +17,6 @@ const io = new Server(httpServer, {
 
 app.use(cors());
 app.use(express.json());
-
-app.use('/api', apiRoutes);
 
 const joinRoom = (socket, roomName) => {
     socket.join(roomName)
@@ -44,7 +41,7 @@ const initNewGameRequests = (roomName: string) => {
 io.on("connection", (socket) => {
     console.log("Client connected :", socket.id);
 
-    socket.on("createRoom", () => {
+    socket.on("createRoom", (gameStyle) => {
         const roomName = uuidv4()
 
         joinRoom(socket, roomName);
