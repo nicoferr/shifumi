@@ -45,9 +45,9 @@ export default function GameResult(props: any) {
     return (
         <div className="flex flex-col gap-3">
             <div className="flex gap-5 items-center justify-center">
-                <div className="w-1/5 bg-gray-200"><img src={`/images/${playerResult.image}`} alt={ playerResult.value } /></div>
+                <div className="w-1/5"><img src={`/images/${playerResult.image}`} alt={ playerResult.value } /></div>
                 <span>{ result }</span>
-                <div className="w-1/5 bg-gray-200"><img src={`/images/${opponentResult.image}` } alt={ opponentResult.value } /></div>
+                <div className="w-1/5"><img src={`/images/${opponentResult.image}` } alt={ opponentResult.value } /></div>
             </div>
             <div className="flex items-center justify-center">
                 { isNewGameAsked && <div>Waiting for opponent for new game...</div> }

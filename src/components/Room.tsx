@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { useSocket } from "../providers/SocketProvider";
 import { NavLink, useLocation, useParams } from "react-router-dom";
 import Game from "./Game";
@@ -7,26 +7,33 @@ import GameProvider from "../providers/GameProvider";
 export default function Room() {
 
     const { roomName } = useParams();
-
-    // On récupère le style de jeu (standard / lizard-spock) dans le state
-    const { state } = useLocation();
-    const gameStyle = state.gameStyle;
-    
     const vsComputer = roomName == 'vs-computer';
+
+    const { state } = useLocation();
+    
     const socket = useSocket();
     // const [ username, setUsername ] = useState<String | null>("Anonymous")
     const [ linkCopied, setLinkCopied ] = useState(false);
     const [ startGame, setStartGame ] = useState(false);
     const [ inviteLink, setInviteLink ] = useState("");
+    const [ gameStyle, setGameStyle ] = useState("");
 
-    if(!vsComputer) {
-        useEffect(() => {
+    // On récupère le style de jeu (standard / lizard-spock) dans le state
+    useEffect(() => {
+        if(vsComputer) {
+            setGameStyle(state.gameStyle);
+        }
+    }, []);
+
+    useEffect(() => {
+        if(!vsComputer) {
             if(!socket) return;
     
             setInviteLink(`http://localhost:5173/room/${roomName}`)
     
-            socket.on("startGame", (startGame) => {
-                setStartGame(startGame);
+            socket.on("startGame", ({ start, style }) => {
+                setGameStyle(style);
+                setStartGame(start);
             })
     
             if(roomName) {
@@ -40,7 +47,7 @@ export default function Room() {
             };
     
             window.addEventListener("beforeunload", handleBeforeUnload);
-    
+
             return () => {
                 // Lors de la navigation vers une autre page
                 if(roomName)
@@ -48,16 +55,16 @@ export default function Room() {
                 window.removeEventListener("beforeunload", handleBeforeUnload);
                 socket.off("startGame");
             };
-        }, [socket, roomName]);
+        }
+    }, [socket, roomName]);
 
-        useEffect(() => {
-            if(linkCopied) {
-                setTimeout(() => {
-                    setLinkCopied(false)
-                }, 2000)
-            }
-        }, [linkCopied]);
-    }
+    useEffect(() => {
+        if(!vsComputer && linkCopied) {
+            setTimeout(() => {
+                setLinkCopied(false)
+            }, 2000)
+        }
+    }, [linkCopied]);
 
     const copyInvite = async () => {
         await navigator.clipboard.writeText(inviteLink);

@@ -14,10 +14,10 @@ export default function RoomCreation() {
         if(vsComputer) {
             navigate("/room/vs-computer", { state: { gameStyle } });
         } else {
-            socket?.emit("createRoom");
+            socket?.emit("createRoom", gameStyle);
     
             socket?.on("roomCreated", (roomName) => {
-                navigate(`/room/${roomName}`, { state: { gameStyle } });
+                navigate(`/room/${roomName}`);
             })
         }
     }

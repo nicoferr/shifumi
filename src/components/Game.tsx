@@ -12,11 +12,10 @@ export default function Game(props: any) {
 
     useEffect(() => {
         const style = gameStyles.find(style => style.name == gameStyle);
-
         if(style) {
             setChoices(style.choices)
         }
-    }, []);
+    }, [gameStyle]);
     
     useEffect(() => {
         if(!vsComputer) {
@@ -114,7 +113,7 @@ export default function Game(props: any) {
                             return (
                                 <button 
                                     key={key}
-                                    className={`btn bg-gray-100 max-w-[300px] ${ gameState.playerChoice == key ? "border-red-500 shadow-md shadow-gray-500" : "" }`}
+                                    className={`btn max-w-[300px] ${ gameState.playerChoice == key ? "border-red-500 shadow-md shadow-gray-500" : "" }`}
                                     onClick={() => handleChoice(key)}
                                     disabled={!gameState.isValidationEnabled}
                                 >

@@ -5,11 +5,11 @@ import { io, Socket } from "socket.io-client";
 interface ServerToClientEvents {
   message: (msg: string) => void;
   roomCreated: (roomId: string) => void;
-  startGame: (start: boolean) => void;
+  startGame: (params : { start: boolean , style: string }) => void;
 }
 interface ClientToServerEvents {
   message: (msg: string) => void;
-  createRoom: () => void;
+  createRoom: (gameStyle: string) => void;
   joinRoom: (roomName: string) => void;
   leaveRoom: (roomName: string) => void;
 }
@@ -23,11 +23,9 @@ export default function SocketProvider(props:any) {
     const [socket, setSocket] = useState<SocketType | null>(null);
 
     useEffect(() => {
-        console.log("USE EFFECT INIT SOCKET");
         const newSocket:SocketType = io('http://localhost:4000');
 
         newSocket.on("connect", () => {
-          console.log("NEW SOCKET", newSocket.id);
           setSocket(newSocket)
         })
 

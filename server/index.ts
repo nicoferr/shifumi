@@ -28,13 +28,18 @@ const joinRoom = (socket, roomName) => {
     console.log("room:", room);
     // console.log("room size:", room?.size);
     if(room && room.size == 2) {
-        io.to(roomName).emit("startGame", true);
+        io.to(roomName).emit("startGame", { start: true, style: gameStyle[roomName] });
     }
 }
 
 let newGameRequests = []; // Array of Number of player asking for new game PER ROOM
 const initNewGameRequests = (roomName: string) => {
     newGameRequests[roomName] = 0;
+}
+
+let gameStyle = [];
+const initGameStyle = (roomName: string, style: string) => {
+    gameStyle[roomName] = style;
 }
 
 
@@ -45,6 +50,7 @@ io.on("connection", (socket) => {
         const roomName = uuidv4()
 
         joinRoom(socket, roomName);
+        initGameStyle(roomName, gameStyle);
         socket.emit("roomCreated", roomName);
         console.log(`New room created : ${roomName}`);
     });
@@ -61,7 +67,7 @@ io.on("connection", (socket) => {
         
         const room = io.sockets.adapter.rooms.get(roomName);
         if(!room || room.size < 2) {
-            io.to(roomName).emit("startGame", false);
+            io.to(roomName).emit("startGame", { start: false, style: gameStyle[roomName] });
         }        
 
     });
