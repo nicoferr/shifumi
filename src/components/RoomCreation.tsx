@@ -23,12 +23,14 @@ export default function RoomCreation() {
     }
 
     return (
-        <div className="p-4 flex flex-col w-full mt-30 items-center justify-center">
-            <div className="flex flex-col items-stretch gap-5">
-                <button className="btn btn-nav gap-3" onClick={() => createRoom("standard")}>
+        <div className="p-4 flex flex-col w-full md:mt-30 items-center justify-center">
+            <div className="flex flex-col md:flex-row items-stretch gap-5">
+                <button className="btn btn-nav gap-3 flex-col" onClick={() => createRoom("standard")}>
+                    <img src="/images/rules/standard.png" alt="Standard rules" title="Standard rules" className="w-100 bg-white" />
                     Standard Rock / Paper / Scissors
                 </button>
-                <button className="btn btn-nav gap-3" onClick={() => createRoom("lizard-spock")}>
+                <button className="btn btn-nav gap-3 flex-col" onClick={() => createRoom("lizard-spock")}>
+                    <img src="/images/rules/lizard-spock.png" alt="Lizard Spock rules" title="Lizard Spock rules" className="w-100 bg-white" />
                     Rock / Paper / Scissors / Lizard / Spock
                 </button>
             </div>

@@ -108,12 +108,12 @@ export default function Game(props: any) {
             {/** Boutons de choix */}
             { gameState.displayChoices &&
                 <>
-                    <div className="flex gap-3 items-center justify-center">
+                    <div className="flex gap-3 items-center justify-center flex-wrap">
                         { choices.map((item: any, key: number) => {
                             return (
                                 <button 
                                     key={key}
-                                    className={`btn max-w-[300px] ${ gameState.playerChoice == key ? "border-red-500 shadow-md shadow-gray-500" : "" }`}
+                                    className={`btn min-w-[100px] max-w-1/4 md:max-w-[200px] ${ gameState.playerChoice == key ? "border-red-500 shadow-md shadow-gray-500" : "" }`}
                                     onClick={() => handleChoice(key)}
                                     disabled={!gameState.isValidationEnabled}
                                 >
