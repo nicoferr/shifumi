@@ -11,6 +11,10 @@ export default function RoomCreation() {
 
     const createRoom = (gameStyle: string) => {
 
+        console.log("CREATE ROOM")
+        console.log("GAMESTYLE", gameStyle);
+        console.log("SOCKET", socket);
+
         if(vsComputer) {
             navigate("/room/vs-computer", { state: { gameStyle } });
         } else {
