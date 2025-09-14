@@ -23,8 +23,8 @@ export default function SocketProvider(props:any) {
     const [socket, setSocket] = useState<SocketType | null>(null);
 
     useEffect(() => {
-        const newSocket:SocketType = io('http://localhost:4000');
-        // const newSocket:SocketType = io('http://backend:4000');
+        // const newSocket:SocketType = io('http://localhost:4000'); // DEV
+        const newSocket:SocketType = io('https://shifumi-rpc.com:4000'); // Prod
 
         newSocket.on("connect", () => {
           setSocket(newSocket)
