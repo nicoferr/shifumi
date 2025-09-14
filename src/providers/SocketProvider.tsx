@@ -24,7 +24,7 @@ export default function SocketProvider(props:any) {
 
     useEffect(() => {
         // const newSocket:SocketType = io('http://localhost:4000'); // DEV
-        const newSocket:SocketType = io('http://shifumi-rpc.com/socket-io/'); // Prod
+        const newSocket:SocketType = io('https://shifumi-rpc.com/socket-io/'); // Prod
 
         newSocket.on("connect", () => {
           setSocket(newSocket)
