@@ -3,14 +3,14 @@ import cors from "cors";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import { v4 as uuidv4 } from "uuid";
-import { join } from "path";
 
 const app = express();
 
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
     cors: {
-        origin: "http://localhost:5173", // Change in PROD
+        // origin: "http://localhost:5173", // Change in PROD
+        origin: "*", // Change in PROD
         methods: ["GET", "POST"]
     }
 });

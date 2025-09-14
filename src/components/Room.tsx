@@ -1,4 +1,4 @@
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSocket } from "../providers/SocketProvider";
 import { NavLink, useLocation, useParams } from "react-router-dom";
 import Game from "./Game";

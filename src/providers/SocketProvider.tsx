@@ -24,6 +24,7 @@ export default function SocketProvider(props:any) {
 
     useEffect(() => {
         const newSocket:SocketType = io('http://localhost:4000');
+        // const newSocket:SocketType = io('http://backend:4000');
 
         newSocket.on("connect", () => {
           setSocket(newSocket)

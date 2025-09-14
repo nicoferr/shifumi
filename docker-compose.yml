@@ -1,0 +1,21 @@
+services:
+  frontend:
+    build: .
+    container_name: shifumi-frontend
+    ports:
+      - "5173:5173"
+    networks:
+      - app-network
+
+  backend:
+    build:
+      context: .
+    container_name: shifumi-backend
+    ports:
+      - "4000:4000"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
