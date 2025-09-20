@@ -30,6 +30,10 @@ export default function SocketProvider(props:any) {
           setSocket(newSocket)
         })
 
+        newSocket.on("connect_error", (err) => {
+            console.error("Socket connection error:", err);
+        });
+
         return () => {
             newSocket.disconnect();
         }

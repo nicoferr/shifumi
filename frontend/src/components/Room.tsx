@@ -30,7 +30,7 @@ export default function Room() {
         if(!vsComputer) {
             if(!socket) return;
     
-            setInviteLink(`http://localhost:5173/room/${roomName}`)
+            setInviteLink(`https://shifumi-rpc.com/room/${roomName}`)
     
             socket.on("startGame", ({ start, style }) => {
                 setGameStyle(style);

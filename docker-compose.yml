@@ -1,6 +1,6 @@
 services:
   frontend:
-    build: .
+    build: ./frontend
     container_name: shifumi-frontend
     ports:
       - "5173:5173"
@@ -9,7 +9,7 @@ services:
 
   backend:
     build:
-      context: .
+      context: ./server
     container_name: shifumi-backend
     ports:
       - "4000:4000"
