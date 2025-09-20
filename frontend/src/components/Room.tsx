@@ -21,7 +21,7 @@ export default function Room() {
 
     // On récupère le style de jeu (standard / lizard-spock) dans le state
     useEffect(() => {
-        if(vsComputer) {
+        if(!vsComputer) {
             setGameStyle(state.gameStyle);
         }
     }, []);
