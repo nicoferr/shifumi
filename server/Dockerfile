@@ -1,12 +1,14 @@
 FROM node:20-alpine
 WORKDIR /app
 
-# Installer les dépendances
-COPY package*.json ./
+# Installer dépendances
+COPY backend/package*.json ./
 RUN npm install
 
-# Copier le code
-COPY . .
+# Copier le code source
+COPY backend ./
+
+# Compiler TypeScript
 RUN npm run build
 
 EXPOSE 4000
