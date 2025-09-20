@@ -18,7 +18,7 @@ const io = new Server(httpServer, {
 app.use(cors());
 app.use(express.json());
 
-const joinRoom = (socket, roomName) => {
+const joinRoom = (socket: any, roomName: string) => {
     socket.join(roomName)
 
     console.log(socket.id, "joined room:", roomName);
@@ -32,12 +32,12 @@ const joinRoom = (socket, roomName) => {
     }
 }
 
-let newGameRequests = []; // Array of Number of player asking for new game PER ROOM
+let newGameRequests: any[string] = []; // Array of Number of player asking for new game PER ROOM
 const initNewGameRequests = (roomName: string) => {
     newGameRequests[roomName] = 0;
 }
 
-let gameStyle = [];
+let gameStyle: any[string] = [];
 const initGameStyle = (roomName: string, style: string) => {
     gameStyle[roomName] = style;
 }

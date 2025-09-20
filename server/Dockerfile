@@ -1,9 +1,12 @@
 FROM node:20-alpine
 WORKDIR /app
-# COPY package*.json ./
-# RUN npm install
-COPY server ./server
-EXPOSE 4000
 
-WORKDIR /app/server
+# Installer les dépendances
+COPY package*.json ./
+RUN npm install
+
+# Copier le code
+COPY . .
+
+EXPOSE 4000
 CMD ["npm", "start"]
