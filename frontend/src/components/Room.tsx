@@ -84,7 +84,7 @@ export default function Room() {
                     <div className=" bg-green-400 text-white text-center p-2 rounded">Invite link saved in clipboard</div>
                 </div>
             }
-            <div className="flex justify-center gap-5 my-5">
+            <div className="flex flex-col md:flex-row justify-center gap-5 my-5">
                 <NavLink to="/">
                     <button className="btn flex items-center gap-3 btn-nav">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6">
@@ -97,7 +97,7 @@ export default function Room() {
             {
                 !vsComputer &&
                 <>
-                    <input id="invite" className="px-3 py-2 rounded-md border border-gray-300 bg-gray-100 text-gray-500" readOnly value={inviteLink} onClick={copyInvite} />
+                    <input id="invite" className="hidden md:block px-3 py-2 rounded-md border border-gray-300 bg-gray-100 text-gray-500" readOnly value={inviteLink} onClick={copyInvite} />
                     <button className="btn btn-blue" onClick={copyInvite}>Copy to invite a friend</button>
                 </>
             }
