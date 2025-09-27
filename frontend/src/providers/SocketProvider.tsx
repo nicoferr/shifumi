@@ -6,6 +6,7 @@ interface ServerToClientEvents {
   message: (msg: string) => void;
   roomCreated: (roomId: string) => void;
   startGame: (params : { start: boolean , style: string }) => void;
+  opponentReady: () => void;
 }
 interface ClientToServerEvents {
   message: (msg: string) => void;
@@ -23,8 +24,8 @@ export default function SocketProvider(props:any) {
     const [socket, setSocket] = useState<SocketType | null>(null);
 
     useEffect(() => {
-        // const newSocket:SocketType = io('http://localhost:4000'); // DEV
-        const newSocket:SocketType = io('https://shifumi-rpc.com'); // Prod
+        const newSocket:SocketType = io('http://localhost:4000'); // DEV
+        // const newSocket:SocketType = io('https://shifumi-rpc.com'); // Prod
 
         newSocket.on("connect", () => {
           setSocket(newSocket)

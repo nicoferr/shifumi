@@ -9,8 +9,8 @@ const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
     cors: {
-        // origin: "http://localhost:5173", // Change in PROD
-        origin: ["https://shifumi-rpc.com", "https://www.shifumi-rpc.com"], // Change in PROD
+        origin: "http://localhost:5173", // Change in PROD
+        // origin: ["https://shifumi-rpc.com", "https://www.shifumi-rpc.com"], // Change in PROD
         methods: ["GET", "POST"]
     }
 });
@@ -83,6 +83,7 @@ io.on("connection", (socket) => {
             initNewGameRequests(roomName);
             io.to(roomName).emit("newGame");
         } else {
+            socket.to(roomName).emit("newGameAsked");
             newGameRequests[roomName]++;
         }
     });

@@ -12,6 +12,10 @@
   @apply bg-[#004080] hover:bg-[#0059a6] text-gray-200;
 }
 
+.btn-green {
+  @apply bg-green-500 text-white;
+}
+
 .btn-red {
   @apply bg-[#7a1e00] hover:bg-[#992700] text-gray-200;
 }

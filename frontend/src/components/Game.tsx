@@ -9,6 +9,8 @@ export default function Game(props: any) {
     const vsComputer = roomName == "vs-computer";
     const { gameState, setGameState } = useGame();
     const [ choices, setChoices ] = useState<any>([]);
+    const [ opponentReady, setOpponentReady ] = useState(false);
+    const [ newGameAsked, setNewGameAsked ] = useState(false);
 
     useEffect(() => {
         const style = gameStyles.find(style => style.name == gameStyle);
@@ -21,11 +23,16 @@ export default function Game(props: any) {
         if(!vsComputer) {
             socket.on("opponentChoice", (opponentChoice: number) => {
                 setGameState((prev) => ({ ...prev, opponentChoice }));
+                setOpponentReady(true);
             });
     
             socket.on("newGame", () => {
                 handleNewGame();
             });
+
+            socket.on("newGameAsked", () => {
+                setNewGameAsked(true);
+            })
         }
 
         return () => {
@@ -54,7 +61,7 @@ export default function Game(props: any) {
         const { playerChoice } = gameState;
 
         if(playerChoice > -1) {
-            setGameState(prev => ({ ...prev, ready: true, isValidationEnabled: false }));
+            setGameState(prev => ({ ...prev, ready: true }));
             if(!vsComputer) {
                 socket.emit('playerChoice', { roomName, choice: playerChoice });
             } else {
@@ -78,8 +85,10 @@ export default function Game(props: any) {
             playerChoice: -1,
             opponentChoice: -1,
             displayChoices: true,
-            isValidationEnabled: true
+            ready: false
         }))
+        setOpponentReady(false);
+        setNewGameAsked(false);
     }
 
     const handleComputer = () => {
@@ -115,7 +124,7 @@ export default function Game(props: any) {
                                     key={key}
                                     className={`btn min-w-[100px] max-w-1/4 md:max-w-[200px] ${ gameState.playerChoice == key ? "border-red-500 shadow-md shadow-gray-500" : "" }`}
                                     onClick={() => handleChoice(key)}
-                                    disabled={!gameState.isValidationEnabled}
+                                    disabled={gameState.ready}
                                 >
                                     <img src={`/images/${item.image}`} alt={item.value} />
                                 </button>
@@ -124,7 +133,7 @@ export default function Game(props: any) {
                     </div>
                     {/** Bouton de validation (Prêt !) */}
                     <div className="flex items-center justify-center gap-5 my-4">
-                        { gameState.playerChoice > -1 && <button disabled={!gameState.isValidationEnabled} className="btn btn-blue px-6" onClick={handleReady}>Ready</button> }
+                        { gameState.playerChoice > -1 && <button disabled={gameState.ready} className={`btn px-6 ${gameState.ready ? 'btn-green' : 'btn-blue'}`} onClick={handleReady}>Ready</button> }
                         { gameState.playerChoice < 0 && 
                         <>
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-5">
@@ -138,13 +147,17 @@ export default function Game(props: any) {
                             </svg>
                         </>}
                     </div>
+                    <div className="flex justify-center text-sm">Opponent {opponentReady ? 'ready !' : 'choosing...'}</div>
                 </>
             }
             { gameState.displayResult && 
-                <GameResult
-                    choices={choices}
-                    handleAskNewGame={handleAskNewGame}
-                />
+                <>
+                    <GameResult
+                        choices={choices}
+                        handleAskNewGame={handleAskNewGame}
+                    />
+                    { newGameAsked && <div className="flex justify-center">Opponent asked for a new game...</div> }
+                </>
             }
         </>
     )

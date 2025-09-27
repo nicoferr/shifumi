@@ -35,8 +35,8 @@ export default function Room() {
             socket.on("startGame", ({ start, style }) => {
                 setGameStyle(style);
                 setStartGame(start);
-            })
-    
+            });
+
             if(roomName) {
                 socket.emit("joinRoom", roomName);
             }

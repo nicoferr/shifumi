@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev:client": "vite",
-    "dev:server": "tsx --watch server/index.ts",
+    "dev:server": "tsx --watch ../server/index.ts",
     "dev": "concurrently \"npm run dev:client\" \"npm run dev:server\"",
     "build": "tsc -b && vite build",
     "lint": "eslint .",

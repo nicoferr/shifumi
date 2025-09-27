@@ -8,7 +8,6 @@ interface GameState {
   playerLosses: number;
   playerDraws: number;
   ready: boolean;
-  isValidationEnabled: boolean;
   displayResult: boolean;
   displayChoices: boolean;
 }
@@ -30,7 +29,6 @@ export default function GameProvider(props:any) {
         playerLosses: 0,
         playerDraws: 0,
         ready: false,
-        isValidationEnabled: true,
         displayResult: false,
         displayChoices: true
     });
